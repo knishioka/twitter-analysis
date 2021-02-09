@@ -1,21 +1,19 @@
 import itertools
 
 import matplotlib.pyplot as plt
-import MeCab
+import tweepy
 from wordcloud import WordCloud
 
+from twitter_analysis.tokenizer import extract_list_of_words
 from twitter_analysis.twitter import twitter_api
 
 
 def main():
-    results = twitter_api().search(q="朝活")
-    tweets = [r.text for r in results]
-    m = MeCab.Tagger("-Ochasen")
-    nouns = list(
-        itertools.chain.from_iterable(
-            [[line.split()[0] for line in m.parse(t).splitlines() if "名詞" in line.split()[-1]] for t in tweets]
-        )
-    )
+    api = twitter_api()
+    tweets = [
+        tweet.full_text for tweet in tweepy.Cursor(api.search, q="朝活", tweet_mode="extended", lang="ja").items(100)
+    ]
+    nouns = list(itertools.chain.from_iterable(map(extract_list_of_words(), tweets)))
     fpath = "~/Library/Fonts/ipaexg.ttf"
     stop_words = ["https"]
     wordcloud = WordCloud(
