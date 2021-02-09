@@ -1,1 +1,4 @@
 tweepy==3.10.0
+matplotlib==3.3.4
+mecab-python==1.0.0
+wordcloud==1.8.1
