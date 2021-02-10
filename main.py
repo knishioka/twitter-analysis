@@ -13,7 +13,7 @@ def main():
     tweets = [
         tweet.full_text for tweet in tweepy.Cursor(api.search, q="朝活", tweet_mode="extended", lang="ja").items(100)
     ]
-    nouns = list(itertools.chain.from_iterable(map(extract_list_of_words(), tweets)))
+    nouns = list(itertools.chain.from_iterable(map(extract_list_of_words, tweets)))
     fpath = "~/Library/Fonts/ipaexg.ttf"
     stop_words = ["https"]
     wordcloud = WordCloud(
